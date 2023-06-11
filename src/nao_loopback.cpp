@@ -1,5 +1,10 @@
 #include "nao_loopback/nao_loopback.hpp"
 
+#include <chrono>
+
+#define FREQUENCY 82  // Hz
+#define PERIOD std::chrono::microseconds(1000000 / FREQUENCY)
+
 namespace nao_loopback
 {
 
@@ -24,12 +29,18 @@ NaoLoopback::NaoLoopback(const rclcpp::NodeOptions & options)
         return;
       }
 
+      std::lock_guard<std::mutex> guard(jointPositionsMutex);
       for (unsigned i = 0; i < cmd->indexes.size(); ++i) {
         int index = cmd->indexes.at(i);
         float position = cmd->positions.at(i);
         jointPositions.positions.at(index) = position;
       }
+    });
 
+  timer = this->create_wall_timer(
+    PERIOD,
+    [this]() {
+      std::lock_guard<std::mutex> guard(jointPositionsMutex);
       jointPositionsPub->publish(jointPositions);
     });
 }
