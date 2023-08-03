@@ -12,17 +12,17 @@ NaoLoopback::NaoLoopback(const rclcpp::NodeOptions & options)
 : rclcpp::Node{"nao_loopback", options}
 {
   jointPositionsPub =
-    create_publisher<nao_sensor_msgs::msg::JointPositions>("sensors/joint_positions", 10);
+    create_publisher<nao_lola_sensor_msgs::msg::JointPositions>("sensors/joint_positions", 10);
 
   jointPositionsSub =
-    create_subscription<nao_command_msgs::msg::JointPositions>(
+    create_subscription<nao_lola_command_msgs::msg::JointPositions>(
     "effectors/joint_positions", 10,
-    [this](nao_command_msgs::msg::JointPositions::SharedPtr cmd) {
+    [this](nao_lola_command_msgs::msg::JointPositions::SharedPtr cmd) {
 
       if (cmd->indexes.size() != cmd->positions.size()) {
         RCLCPP_ERROR(
           get_logger(),
-          "Incorrect message received for nao_command_msgs::msg::JointPositions. "
+          "Incorrect message received for nao_lola_command_msgs::msg::JointPositions. "
           "Angles and Indexes vector must have the same length. "
           "Angles vector has length %zu, while indexes vector has length %zu",
           cmd->positions.size(), cmd->indexes.size());

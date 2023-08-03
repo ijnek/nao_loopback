@@ -7,14 +7,14 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(nao_command_msgs REQUIRED)
-find_package(nao_sensor_msgs REQUIRED)
+find_package(nao_lola_command_msgs REQUIRED)
+find_package(nao_lola_sensor_msgs REQUIRED)
 find_package(rclcpp_components REQUIRED)
 
 set(THIS_PACKAGE_INCLUDE_DEPENDS
   ament_cmake
-  nao_command_msgs
-  nao_sensor_msgs
+  nao_lola_command_msgs
+  nao_lola_sensor_msgs
   rclcpp_components)
 
 # Build
