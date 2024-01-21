@@ -15,11 +15,10 @@
 #ifndef NAO_LOOPBACK__NAO_LOOPBACK_HPP_
 #define NAO_LOOPBACK__NAO_LOOPBACK_HPP_
 
-#include <mutex>
-
 #include "nao_lola_sensor_msgs/msg/joint_positions.hpp"
 #include "nao_lola_command_msgs/msg/joint_positions.hpp"
 #include "rclcpp/node.hpp"
+#include "sensor_msgs/msg/joint_state.hpp"
 
 namespace nao_loopback
 {
@@ -31,11 +30,12 @@ public:
 
 private:
   rclcpp::Publisher<nao_lola_sensor_msgs::msg::JointPositions>::SharedPtr jointPositionsPub;
+  rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr jointStatesPub;
   rclcpp::Subscription<nao_lola_command_msgs::msg::JointPositions>::SharedPtr jointPositionsSub;
   rclcpp::TimerBase::SharedPtr timer;
 
   nao_lola_sensor_msgs::msg::JointPositions jointPositions;
-  std::mutex jointPositionsMutex;
+  sensor_msgs::msg::JointState jointStates;
 };
 
 }  // namespace nao_loopback

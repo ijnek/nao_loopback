@@ -10,15 +10,18 @@ find_package(ament_cmake REQUIRED)
 find_package(nao_lola_command_msgs REQUIRED)
 find_package(nao_lola_sensor_msgs REQUIRED)
 find_package(rclcpp_components REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 set(THIS_PACKAGE_INCLUDE_DEPENDS
   ament_cmake
   nao_lola_command_msgs
   nao_lola_sensor_msgs
-  rclcpp_components)
+  rclcpp_components
+  sensor_msgs)
 
 # Build
 add_library(${PROJECT_NAME}_node SHARED
+  src/conversion.cpp
   src/nao_loopback.cpp)
 target_include_directories(${PROJECT_NAME}_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

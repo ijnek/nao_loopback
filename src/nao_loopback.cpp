@@ -16,6 +16,8 @@
 
 #include <chrono>
 
+#include "conversion.hpp"
+
 #define FREQUENCY 82  // Hz
 #define PERIOD std::chrono::microseconds(1000000 / FREQUENCY)
 
@@ -27,6 +29,8 @@ NaoLoopback::NaoLoopback(const rclcpp::NodeOptions & options)
 {
   jointPositionsPub =
     create_publisher<nao_lola_sensor_msgs::msg::JointPositions>("sensors/joint_positions", 10);
+  jointStatesPub =
+    create_publisher<sensor_msgs::msg::JointState>("joint_states", 10);
 
   jointPositionsSub =
     create_subscription<nao_lola_command_msgs::msg::JointPositions>(
@@ -42,19 +46,21 @@ NaoLoopback::NaoLoopback(const rclcpp::NodeOptions & options)
         return;
       }
 
-      std::lock_guard<std::mutex> guard(jointPositionsMutex);
       for (unsigned i = 0; i < cmd->indexes.size(); ++i) {
         int index = cmd->indexes.at(i);
         float position = cmd->positions.at(i);
         jointPositions.positions.at(index) = position;
       }
+
+      jointStates = conversion::toJointState(jointPositions);
+      jointStates.header.stamp = now();
     });
 
   timer = this->create_wall_timer(
     PERIOD,
     [this]() {
-      std::lock_guard<std::mutex> guard(jointPositionsMutex);
       jointPositionsPub->publish(jointPositions);
+      jointStatesPub->publish(jointStates);
     });
 }
 
