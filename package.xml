@@ -12,6 +12,7 @@
   <depend>nao_lola_command_msgs</depend>
   <depend>nao_lola_sensor_msgs</depend>
   <depend>rclcpp_components</depend>
+  <depend>sensor_msgs</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
